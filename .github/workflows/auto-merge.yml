@@ -10,6 +10,7 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - name: Checkout repository
