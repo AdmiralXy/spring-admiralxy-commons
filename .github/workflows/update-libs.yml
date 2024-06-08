@@ -1,4 +1,4 @@
-name: Update dependencies and run tests
+name: Update dependencies CI
 
 on:
   schedule:
