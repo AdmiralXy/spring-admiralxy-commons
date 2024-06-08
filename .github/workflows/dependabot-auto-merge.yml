@@ -1,5 +1,8 @@
 name: Dependabot auto-merge
-on: pull_request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
@@ -15,8 +18,30 @@ jobs:
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh-cli@v1
+
+      - name: Check pull request status
+        id: pr-status
+        run: |
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_STATUS=$(gh pr view "$PR_URL" --json mergeable,mergeStateStatus -q '.mergeable')
+          echo "Pull Request URL: $PR_URL"
+          echo "Mergeable Status: $PR_STATUS"
+          echo "::set-output name=mergeable::$PR_STATUS"
+
       - name: Enable auto-merge for Dependabot PRs
+        if: steps.pr-status.outputs.mergeable == 'MERGEABLE'
         run: gh pr merge --auto --merge "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if PR is not mergeable
+        if: steps.pr-status.outputs.mergeable != 'MERGEABLE'
+        run: echo "Pull request is not mergeable. Please resolve conflicts or failing checks."
+        continue-on-error: true
