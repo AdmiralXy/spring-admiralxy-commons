@@ -30,6 +30,8 @@ jobs:
           echo "Pull Request URL: $PR_URL"
           echo "Mergeable Status: $PR_STATUS"
           echo "::set-output name=mergeable::$PR_STATUS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable auto-merge for Dependabot PRs
         if: steps.pr-status.outputs.mergeable == 'MERGEABLE'
