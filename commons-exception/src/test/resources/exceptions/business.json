@@ -1,0 +1,7 @@
+{
+  "httpStatus": "BAD_REQUEST",
+  "type": "business",
+  "data": {
+    "message": "message"
+  }
+}

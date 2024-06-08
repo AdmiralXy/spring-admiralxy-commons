@@ -1,0 +1,17 @@
+{
+  "httpStatus": "BAD_REQUEST",
+  "type": "validation",
+  "data": {
+    "fields": {
+      "fieldName2": [
+        "message",
+        "message",
+        "message"
+      ],
+      "fieldName1": [
+        "message",
+        "message"
+      ]
+    }
+  }
+}
