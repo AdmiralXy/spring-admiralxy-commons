@@ -3,6 +3,7 @@ plugins {
 	checkstyle
 	idea
 	`maven-publish`
+	id("com.github.ben-manes.versions") version libs.versions.ben.manes.versions.get()
 }
 
 java {
