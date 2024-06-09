@@ -9,6 +9,8 @@ plugins {
 }
 
 java {
+	withJavadocJar()
+	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_21
 }
 
@@ -51,6 +53,7 @@ subprojects {
 					name = "Spring AdmiralXy Commons"
 					description = "Utility library for Spring Boot applications"
 					url = "https://github.com/AdmiralXy/spring-admiralxy-commons"
+					packaging = "jar"
 
 					licenses {
 						license {
@@ -75,8 +78,9 @@ subprojects {
 		}
 		repositories {
 			maven {
-				name = "sonatype"
-				url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+				val releasesUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+				val snapshotsUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+				url = if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl
 				credentials {
 					username = project.findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
 					password = project.findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
