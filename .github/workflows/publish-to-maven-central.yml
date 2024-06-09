@@ -1,0 +1,71 @@
+name: Publish to Maven Central
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module to publish'
+        required: true
+        default: 'commons-cqrs'
+        type: choice
+        options: [
+          'commons-domain-core',
+          'commons-domain-persistence',
+          'commons-cqrs',
+          'commons-exception',
+          'commons-messages'
+        ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project sources
+        uses: actions/checkout@v4
+
+      - name: Setup Gradle
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew check test --info --warning-mode=all
+
+      - name: Build and publish to Maven Central
+        run: ./gradlew :${{ github.event.inputs.module }}:publish
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Increment version
+        id: increment_version
+        run: |
+          FILE=${{ github.event.inputs.module }}/gradle.properties
+          VERSION=$(grep 'version=' $FILE | cut -d '=' -f2)
+          NEW_VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++;print}')
+          echo "version=$NEW_VERSION" > $FILE
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add $FILE
+          git commit -m "Increment version to $NEW_VERSION"
+          git push
+
+      - name: Create tag
+        run: |
+          NEW_VERSION=$(grep 'version=' ${{ github.event.inputs.module }}/gradle.properties | cut -d '=' -f2)
+          git tag -a "${{ github.event.inputs.module }}-v$NEW_VERSION" -m "Release $NEW_VERSION"
+          git push origin "${{ github.event.inputs.module }}-v$NEW_VERSION"
