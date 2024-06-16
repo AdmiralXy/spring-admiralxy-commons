@@ -46,6 +46,7 @@ jobs:
       - name: Build and publish
         run: ./gradlew :${{ github.event.inputs.module }}:publish
         env:
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
