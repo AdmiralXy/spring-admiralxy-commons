@@ -54,13 +54,14 @@ jobs:
       - name: Increment package version
         id: increment_version
         run: |
+          git fetch origin main
+          git checkout -b increment-version-${{ github.run_id }} origin/main
           FILE=${{ github.event.inputs.module }}/gradle.properties
           VERSION=$(grep 'version=' $FILE | cut -d '=' -f2)
           NEW_VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++;print}')
           echo "version=$NEW_VERSION" > $FILE
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b increment-version-${{ github.run_id }}
           git add $FILE
           git commit -m "Increment version to $NEW_VERSION"
           git push origin increment-version-${{ github.run_id }}
@@ -70,6 +71,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: increment-version-${{ github.run_id }}
+          base: main
           commit-message: Increment version to $NEW_VERSION
           title: Increment version to $NEW_VERSION
           body: This PR increments the package version to $NEW_VERSION
