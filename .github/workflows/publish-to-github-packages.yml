@@ -1,4 +1,4 @@
-name: Publish to Maven Central
+name: Publish to GitHub Packages
 
 on:
   workflow_dispatch:
@@ -43,13 +43,13 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew check test --info --warning-mode=all
 
-      - name: Build and publish to Maven Central
+      - name: Build and publish
         run: ./gradlew :${{ github.event.inputs.module }}:publish
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Increment version
+      - name: Increment package version
         id: increment_version
         run: |
           FILE=${{ github.event.inputs.module }}/gradle.properties
