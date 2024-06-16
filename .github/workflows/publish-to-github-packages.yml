@@ -60,9 +60,20 @@ jobs:
           echo "version=$NEW_VERSION" > $FILE
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b increment-version-${{ github.run_id }}
           git add $FILE
           git commit -m "Increment version to $NEW_VERSION"
-          git push
+          git push origin increment-version-${{ github.run_id }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: increment-version-${{ github.run_id }}
+          commit-message: Increment version to $NEW_VERSION
+          title: Increment version to $NEW_VERSION
+          body: This PR increments the package version to $NEW_VERSION
+          labels: version-bump
 
       - name: Create tag
         run: |
