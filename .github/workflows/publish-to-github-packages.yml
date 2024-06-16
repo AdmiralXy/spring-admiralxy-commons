@@ -67,7 +67,7 @@ jobs:
           git push origin increment-version-${{ github.run_id }}
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: increment-version-${{ github.run_id }}
@@ -76,9 +76,3 @@ jobs:
           title: Increment version to $NEW_VERSION
           body: This PR increments the package version to $NEW_VERSION
           labels: version-bump
-
-      - name: Create tag
-        run: |
-          NEW_VERSION=$(grep 'version=' ${{ github.event.inputs.module }}/gradle.properties | cut -d '=' -f2)
-          git tag -a "${{ github.event.inputs.module }}-v$NEW_VERSION" -m "Release $NEW_VERSION"
-          git push origin "${{ github.event.inputs.module }}-v$NEW_VERSION"
