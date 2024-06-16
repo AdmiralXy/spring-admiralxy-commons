@@ -57,8 +57,8 @@ subprojects {
 
 					licenses {
 						license {
-							name = "The Apache License, Version 2.0"
-							url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+							name = "GNU General Public License v3.0"
+							url = "https://www.gnu.org/licenses/gpl-3.0.html"
 						}
 					}
 					developers {
@@ -69,8 +69,8 @@ subprojects {
 						}
 					}
 					scm {
-						connection = "scm:git:git://github.com/AdmiralXy/spring-admiralxy-commons.git"
-						developerConnection = "scm:git:ssh://github.com/AdmiralXy/spring-admiralxy-commons.git"
+						connection = "scm:https://github.com/AdmiralXy/spring-admiralxy-commons.git"
+						developerConnection = "scm:git@github.com:AdmiralXy/spring-admiralxy-commons.git"
 						url = "https://github.com/AdmiralXy/spring-admiralxy-commons"
 					}
 				}
@@ -78,12 +78,11 @@ subprojects {
 		}
 		repositories {
 			maven {
-				val releasesUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-				val snapshotsUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-				url = if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl
+				name = "GitHubPackages"
+				url = uri("https://maven.pkg.github.com/AdmiralXy/spring-admiralxy-commons")
 				credentials {
-					username = project.findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
-					password = project.findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
+					username = System.getenv("GITHUB_ACTOR")
+					password = System.getenv("GITHUB_TOKEN")
 				}
 			}
 		}
