@@ -1,7 +1,7 @@
 [versions]
 spring-core-version = "6.1.13"
 spring-web = "6.1.13"
-junit-api = "5.11.1"
+junit-api = "5.11.2"
 junit-engine = "5.11.2"
 jakarta-persistence = "3.2.0"
 jakarta-validation = "3.1.0"
