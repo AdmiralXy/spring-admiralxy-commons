@@ -1,5 +1,5 @@
 [versions]
-spring-core-version = "6.2.0"
+spring-core-version = "6.2.1"
 spring-web = "6.2.0"
 junit-api = "5.11.3"
 junit-engine = "5.11.3"
