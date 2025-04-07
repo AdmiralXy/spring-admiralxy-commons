@@ -2,7 +2,7 @@
 spring-core-version = "6.2.5"
 spring-web = "6.2.5"
 junit-api = "5.11.4"
-junit-engine = "5.11.4"
+junit-engine = "5.12.1"
 jakarta-persistence = "3.2.0"
 jakarta-validation = "3.1.1"
 hibernate-core = "6.6.13.Final"
