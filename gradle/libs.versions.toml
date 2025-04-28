@@ -9,7 +9,7 @@ hibernate-core = "6.6.13.Final"
 lombok = "1.18.38"
 commons-lang3 = "3.17.0"
 jackson-anotations = "2.18.3"
-jackson-databind = "2.18.3"
+jackson-databind = "2.19.0"
 ben-manes-versions = "0.42.0"
 
 [libraries]
