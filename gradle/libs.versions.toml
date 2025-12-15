@@ -1,6 +1,6 @@
 [versions]
 spring-core-version = "7.0.1"
-spring-web = "7.0.1"
+spring-web = "7.0.2"
 junit-api = "5.11.4"
 junit-engine = "5.11.4"
 jakarta-persistence = "3.2.0"
