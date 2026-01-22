@@ -8,7 +8,7 @@ jakarta-validation = "3.1.1"
 hibernate-core = "7.2.1.Final"
 lombok = "1.18.42"
 commons-lang3 = "3.20.0"
-jackson-anotations = "2.20"
+jackson-anotations = "2.21"
 jackson-databind = "2.21.0"
 ben-manes-versions = "0.42.0"
 
